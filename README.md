@@ -72,3 +72,36 @@ gbm_monte_carlo_python_matlab/
     └── project_summary_template.md
 ```
 
+## Results and Visualisations
+
+### Pricing Summary
+
+| Option | Black-Scholes Price | Monte Carlo Price | Standard Error | 95% Confidence Interval | Absolute Error |
+|---|---:|---:|---:|---:|---:|
+| Call | 10.4506 | 10.4898 | 0.0661 | [10.3602, 10.6195] | 0.0393 |
+| Put | 5.5735 | 5.5755 | 0.0387 | [5.4996, 5.6514] | 0.0020 |
+
+The Monte Carlo call and put prices are close to the Black-Scholes analytical benchmarks, showing that the simulation is correctly approximating the theoretical option values.
+
+### Simulated GBM Stock-Price Paths
+
+![Simulated GBM paths](outputs/gbm_sample_paths.png)
+
+### Terminal Stock Price Distribution
+
+![Terminal stock distribution](outputs/terminal_stock_distribution.png)
+
+### European Call Payoff Distribution
+
+![Call payoff distribution](outputs/call_payoff_distribution.png)
+
+### Monte Carlo Convergence
+
+![Monte Carlo convergence](outputs/call_convergence.png)
+
+The convergence chart shows the Monte Carlo price approaching the Black-Scholes benchmark as the number of simulated paths increases. The confidence interval narrows as the number of simulations increases, showing the reduction in estimation error.
+
+## Output Data
+
+- [Option pricing summary CSV](outputs/option_pricing_summary.csv)
+- [Monte Carlo convergence results CSV](outputs/call_convergence_results.csv)
