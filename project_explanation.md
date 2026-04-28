@@ -999,24 +999,24 @@ The Theta chart shows time decay. For long options, Theta is generally negative 
 For a European call option under Black-Scholes:
 
 $$
-\Theta_{\text{call}}
+\Theta_{\mathrm{call}}
 =
--\frac{S N'(d_1)\sigma}{2\sqrt{T}}
+-\frac{S\,N'(d_1)\,\sigma}{2\sqrt{T}}
 -
-rKe^{-rT}N(d_2)
+rK e^{-rT}N(d_2)
 $$
 
-For a European put option:
+For a European put option under Black-Scholes:
 
 $$
-\Theta_{\text{put}}
+\Theta_{\mathrm{put}}
 =
--\frac{S N'(d_1)\sigma}{2\sqrt{T}}
+-\frac{S\,N'(d_1)\,\sigma}{2\sqrt{T}}
 +
-rKe^{-rT}N(-d_2)
+rK e^{-rT}N(-d_2)
 $$
 
-In the Python implementation, Theta is divided by $365$ so that it represents daily time decay.
+In the python implementation, Theta is divided by $365$ so that it represents approximate daily time decay
 
 ---
 
