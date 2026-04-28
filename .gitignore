@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+outputs/*.png
+outputs/*.csv
+outputs_matlab/*.png
+outputs_matlab/*.csv
