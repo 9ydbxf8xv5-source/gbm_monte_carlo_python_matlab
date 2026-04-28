@@ -988,35 +988,35 @@ In the Python implementation, Vega is divided by $100$ so that it represents the
 
 ### Theta
 
-Theta measures sensitivity to the passage of time:
+Theta measures the sensitivity of an option price to the passage of time. In practice, Theta is usually interpreted as **time decay**.
 
-$$
-\Theta=\frac{\partial V}{\partial t}
-$$
-
-The Theta chart shows time decay. For long options, Theta is generally negative because the option loses time value as maturity approaches. This reflects the cost of holding optionality over time.
+For a long option position, Theta is usually negative because the option loses time value as it approaches maturity.
 
 For a European call option under Black-Scholes:
 
 $$
-\Theta_{\mathrm{call}}
-=
--\frac{S\,N'(d_1)\,\sigma}{2\sqrt{T}}
--
-rK e^{-rT}N(d_2)
+\theta_c=-\frac{S\sigma\phi(d_1)}{2\sqrt{T}}-rKe^{-rT}N(d_2)
 $$
 
 For a European put option under Black-Scholes:
 
 $$
-\Theta_{\mathrm{put}}
-=
--\frac{S\,N'(d_1)\,\sigma}{2\sqrt{T}}
-+
-rK e^{-rT}N(-d_2)
+\theta_p=-\frac{S\sigma\phi(d_1)}{2\sqrt{T}}+rKe^{-rT}N(-d_2)
 $$
 
-In the python implementation, Theta is divided by $365$ so that it represents approximate daily time decay
+where:
+
+- $\theta_c$ is the call option Theta;
+- $\theta_p$ is the put option Theta;
+- $S$ is the current stock price;
+- $K$ is the strike price;
+- $T$ is time to maturity;
+- $r$ is the risk-free rate;
+- $\sigma$ is volatility;
+- $\phi(d_1)$ is the standard normal probability density function evaluated at $d_1$;
+- $N(d_2)$ is the standard normal cumulative distribution function evaluated at $d_2$.
+
+In the Python implementation, Theta is divided by $365$ so that it represents approximate daily time decay.
 
 ---
 
