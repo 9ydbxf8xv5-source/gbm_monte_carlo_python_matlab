@@ -8,8 +8,8 @@ It simulates stock-price paths using **Geometric Brownian Motion (GBM)**, prices
 
 The project includes both:
 
-- a **Python implementation** for GitHub/CV use;
-- a **MATLAB implementation** linked to Computational Methods in Finance coursework.
+- a **Python implementation** 
+- a **MATLAB implementation** linked to Computational Methods in Finance module I am studying
 
 ## Mathematical Model
 
