@@ -109,14 +109,7 @@ $$
 
 The exact discretisation used in the project is:
 
-$$
-S_{t+\Delta t}$$
-=
-$$
-S_t
-\exp
-\left[
-\left(r-\frac{1}{2}\sigma^2\right)\Delta t
+$$ S_{t+\Delta t}$$
 +
 \sigma\sqrt{\Delta t}\,Z
 \right],
