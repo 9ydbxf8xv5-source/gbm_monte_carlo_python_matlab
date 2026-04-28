@@ -109,7 +109,13 @@ $$
 
 The exact discretisation used in the project is:
 
-$$ S_{t+\Delta t}$$
+$$
+S_{t+\Delta t}
+=
+S_t
+\exp
+\left[
+\left(r-\frac{1}{2}\sigma^2\right)\Delta t
 +
 \sigma\sqrt{\Delta t}\,Z
 \right],
@@ -225,9 +231,7 @@ where:
 
 $$
 d_1
-$$
 =
-$$
 \frac{
 \ln\left(\frac{S_0}{K}\right)
 +
@@ -312,7 +316,7 @@ Z = rng.standard_normal((n_steps, n_paths))
 Then it calculates log increments:
 
 ~~~python
-log_increments = (r - 0.5 * sigma2) * dt + sigma * np.sqrt(dt) * Z
+log_increments = (r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * Z
 ~~~
 
 The cumulative sum creates the log-stock path:
@@ -375,9 +379,7 @@ The standard error is calculated as:
 
 $$
 SE
-$$
 =
-$$
 \frac{\sigma_{\text{payoff}}}{\sqrt{N}}
 $$
 
@@ -657,9 +659,7 @@ Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
 
 $$
 V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})
-$$
 =
-$$
 V_{\text{market}}
 $$
 
@@ -855,9 +855,7 @@ The simulated stock-price paths are generated using the exact GBM discretisation
 
 $$
 S_{t+\Delta t}
-$$
 =
-$$
 S_t
 \exp
 \left[
