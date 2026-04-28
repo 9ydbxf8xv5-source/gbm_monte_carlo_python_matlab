@@ -214,40 +214,30 @@ The Black-Scholes formula provides an analytical benchmark for European call and
 For a European call:
 
 $$
-C = S_0N(d_1)-Ke^{-rT}N(d_2)
+C=S_0N(d_1)-Ke^{-rT}N(d_2)
 $$
 
 For a European put:
 
 $$
-P = Ke^{-rT}N(-d_2)-S_0N(-d_1)
+P=Ke^{-rT}N(-d_2)-S_0N(-d_1)
 $$
 
 where:
 
 $$
-d_1
-=
-\frac{
-\ln\left(\frac{S_0}{K}\right)
-+
-\left(r+\frac{1}{2}\sigma^2\right)T
-}{
-\sigma\sqrt{T}
-}
+d_1=\frac{\ln\left(\frac{S_0}{K}\right)+\left(r+\frac{1}{2}\sigma^2\right)T}{\sigma\sqrt{T}}
 $$
 
 and:
 
 $$
-d_2 = d_1-\sigma\sqrt{T}
+d_2=d_1-\sigma\sqrt{T}
 $$
 
 Here, $N(\cdot)$ is the standard normal cumulative distribution function.
 
 The project compares the Monte Carlo option prices against the Black-Scholes values. Since both methods price the same European options under the same assumptions, the Monte Carlo values should converge toward the Black-Scholes benchmarks as the number of simulations increases.
-
----
 
 ## 8. Parameters Used
 
@@ -374,9 +364,7 @@ Monte Carlo simulation produces an estimate, not an exact value.
 The standard error is calculated as:
 
 $$
-SE
-=
-\frac{\sigma_{\text{payoff}}}{\sqrt{N}}
+SE=\frac{\sigma_{\text{payoff}}}{\sqrt{N}}
 $$
 
 where:
@@ -387,7 +375,7 @@ where:
 A 95% confidence interval is calculated as:
 
 $$
-\text{Price} \pm 1.96 \times SE
+\text{Price}\pm1.96\times SE
 $$
 
 This shows the uncertainty around the Monte Carlo estimate.
@@ -654,14 +642,26 @@ Implied volatility is the volatility value that makes the Black-Scholes price eq
 Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
 
 $$
-V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})
-=
-V_{\text{market}}
+V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})=V_{\text{market}}
 $$
 
 This is important because market participants often quote and compare options in volatility terms rather than price terms.
 
-The implied volatility section uses synthetic option prices to recover implied volatilities across different strikes and maturities. This creates a volatility smile and a volatility surface.
+## 17. Implied Volatility
+
+The project also adds an implied volatility solve.
+
+Implied volatility is the volatility value that makes the Black-Scholes price equal to a given market option price.
+
+Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
+
+$$
+V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})=V_{\text{market}}
+$$
+
+This is important because market participants often quote and compare options in volatility terms rather than price terms.
+
+The implied volatility section uses synthetic option prices to recover implied volatilities across different strikes and maturities. This creates a volatility smile and volatility surface.
 
 ---
 
@@ -850,20 +850,16 @@ The risk-neutral framework is important because option pricing is not based on t
 The simulated stock-price paths are generated using the exact GBM discretisation:
 
 $$
-S_{t+\Delta t}
-=
-S_t
-\exp
-\left[
-\left(r-\frac{1}{2}\sigma^2\right)\Delta t
-+
-\sigma\sqrt{\Delta t}\,Z
-\right],
-\qquad
-Z \sim \mathcal{N}(0,1)
+S_{t+\Delta t}=S_t\exp\left(\left(r-\frac{1}{2}\sigma^2\right)\Delta t+\sigma\sqrt{\Delta t}\,Z\right)
 $$
 
-This formula creates many possible future paths for the stock price. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term $\sigma\sqrt{\Delta t}\,Z$.
+where:
+
+$$
+Z\sim\mathcal{N}(0,1)
+$$
+
+This formula creates many possible future paths for the stock price. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term.
 
 Once the stock-price paths are simulated, the project prices European options by calculating the payoff at maturity. For a European call option, the payoff is:
 
