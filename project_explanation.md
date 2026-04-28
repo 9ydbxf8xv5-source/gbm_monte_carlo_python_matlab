@@ -88,7 +88,7 @@ This was the starting point for the MATLAB version of the project.
 
 Brownian motion itself can take negative values, so it is not directly suitable for modelling stock prices. Stock prices must remain positive.
 
-The Black-Scholes framework therefore models stock prices using Geometric Brownian Motion:
+The Black-Scholes framework therefore models stock prices using **Geometric Brownian Motion**:
 
 $$
 dS_t = \mu S_t\,dt + \sigma S_t\,dW_t
@@ -101,7 +101,7 @@ where:
 - $\sigma$ is volatility;
 - $W_t$ is Brownian motion.
 
-For option pricing, we use the risk-neutral measure, where the expected return $\mu$ is replaced by the risk-free rate $r$:
+For option pricing, we use the **risk-neutral measure**, where the expected return $\mu$ is replaced by the risk-free rate $r$:
 
 $$
 dS_t = rS_t\,dt + \sigma S_t\,dW_t
@@ -110,19 +110,16 @@ $$
 The exact discretisation used in the project is:
 
 $$
-S_{t+\Delta t}
-=
-S_t
-\exp\left[
-\left(r-\frac{1}{2}\sigma^2\right)\Delta t
-+
-\sigma\sqrt{\Delta t}\,Z
-\right],
-\qquad
+S_{t+\Delta t}=S_t\exp\left(\left(r-\frac{1}{2}\sigma^2\right)\Delta t+\sigma\sqrt{\Delta t}\,Z\right)
+$$
+
+where:
+
+$$
 Z \sim \mathcal{N}(0,1)
 $$
 
-This formula creates many possible future stock-price paths. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term.
+This formula is used to simulate the stock-price paths. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term.
 
 ---
 
