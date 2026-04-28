@@ -113,8 +113,7 @@ $$
 S_{t+\Delta t}
 =
 S_t
-\exp
-\left[
+\exp\left[
 \left(r-\frac{1}{2}\sigma^2\right)\Delta t
 +
 \sigma\sqrt{\Delta t}\,Z
