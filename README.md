@@ -168,3 +168,8 @@ The volatility surface extends the volatility smile across both strike and matur
 
 - [Greeks vs stock price CSV](outputs/greeks_vs_stock_price.csv)
 - [Synthetic option market implied volatility CSV](outputs/synthetic_option_market_iv.csv)
+
+- ## Additional Project Documentation
+
+- [Detailed project explanation](project_explanation.md)
+- [Project summary template](report/project_summary_template.md)
