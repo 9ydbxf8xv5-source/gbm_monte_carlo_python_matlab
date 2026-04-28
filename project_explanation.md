@@ -110,8 +110,9 @@ $$
 The exact discretisation used in the project is:
 
 $$
-S_{t+\Delta t}
+S_{t+\Delta t}$$
 =
+$$
 S_t
 \exp
 \left[
@@ -231,7 +232,9 @@ where:
 
 $$
 d_1
+$$
 =
+$$
 \frac{
 \ln\left(\frac{S_0}{K}\right)
 +
@@ -379,7 +382,9 @@ The standard error is calculated as:
 
 $$
 SE
+$$
 =
+$$
 \frac{\sigma_{\text{payoff}}}{\sqrt{N}}
 $$
 
@@ -659,7 +664,9 @@ Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
 
 $$
 V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})
+$$
 =
+$$
 V_{\text{market}}
 $$
 
@@ -855,7 +862,9 @@ The simulated stock-price paths are generated using the exact GBM discretisation
 
 $$
 S_{t+\Delta t}
+$$
 =
+$$
 S_t
 \exp
 \left[
