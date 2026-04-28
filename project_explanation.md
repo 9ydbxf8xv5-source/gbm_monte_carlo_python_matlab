@@ -828,7 +828,7 @@ The project provides a foundation for future work in:
 
 ## Project Explanation and Mathematical Intuition Behind Black-Scholes, Greeks, and Implied Volatility
 
-This project builds a derivatives-pricing framework using Geometric Brownian Motion (GBM), Monte Carlo simulation, and the Black-Scholes model. The main objective is to simulate possible future stock-price paths, price European call and put options from those simulated outcomes, and compare the Monte Carlo estimates against Black-Scholes analytical prices.
+This project builds a derivatives-pricing framework using Geometric Brownian Motion (GBM), Monte Carlo simulation, and the **Black-Scholes model. The main objective is to simulate possible future stock-price paths, price European call and put options from those simulated outcomes, and compare the Monte Carlo estimates against Black-Scholes analytical prices.
 
 The project starts from the idea that stock prices are uncertain and can be modelled as stochastic processes. A basic Brownian motion process captures random movement through normally distributed increments. However, Brownian motion itself can become negative, which is not suitable for stock prices. To model stock prices, the project uses Geometric Brownian Motion, which keeps simulated prices positive and gives lognormally distributed terminal stock prices.
 
@@ -859,9 +859,11 @@ $$
 Z\sim\mathcal{N}(0,1)
 $$
 
-This formula creates many possible future paths for the stock price. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term.
+This formula creates many possible future paths for the stock price. Each path represents one possible future market outcome. As time increases, the paths spread out because uncertainty accumulates through the volatility term $\sigma\sqrt{\Delta t}\,Z$.
 
-Once the stock-price paths are simulated, the project prices European options by calculating the payoff at maturity. For a European call option, the payoff is:
+Once the stock-price paths are simulated, the project prices European options by calculating the payoff at maturity.
+
+For a European call option, the payoff is:
 
 $$
 \max(S_T-K,0)
@@ -875,14 +877,10 @@ $$
 
 where $S_T$ is the terminal stock price and $K$ is the strike price.
 
-The Monte Carlo option price is then calculated by averaging the discounted payoffs:
+The Monte Carlo option price is calculated by averaging the discounted payoffs:
 
 $$
-V_0
-\approx
-e^{-rT}
-\frac{1}{N}
-\sum_{i=1}^{N}V_T^{(i)}
+V_0=e^{-rT}\frac{1}{N}\sum_{i=1}^{N}V_T^{(i)}
 $$
 
 where:
@@ -897,9 +895,7 @@ The Monte Carlo results are compared against the Black-Scholes analytical benchm
 The project also calculates the standard error and $95\%$ confidence interval of the Monte Carlo estimate. This is important because Monte Carlo pricing is statistical rather than exact. The standard error measures the uncertainty in the estimate:
 
 $$
-SE
-=
-\frac{\sigma_{\text{payoff}}}{\sqrt{N}}
+SE=\frac{\sigma_{\text{payoff}}}{\sqrt{N}}
 $$
 
 As the number of simulations $N$ increases, the standard error decreases. This means the Monte Carlo price becomes more stable and the confidence interval becomes narrower.
@@ -908,84 +904,233 @@ The convergence chart demonstrates this effect visually. With a small number of 
 
 The project also includes antithetic variates, a simple variance-reduction technique. Instead of only simulating random shocks $Z$, the model also simulates the opposite shocks $-Z$. This helps balance upward and downward movements and can reduce the variance of the Monte Carlo estimator. This is useful in computational finance because lower variance means more accurate estimates without necessarily requiring a much larger number of simulations.
 
-The project was then extended to include Black-Scholes Greeks. Greeks measure how sensitive an option price is to different market variables. This is important because traders and risk managers do not only care about the option price; they also care about how that price changes when market conditions change.
+---
+
+## Black-Scholes Greeks
+
+The project was extended to include Black-Scholes Greeks. Greeks measure how sensitive an option price is to different market variables. This is important because traders and risk managers do not only care about the option price; they also care about how that price changes when market conditions change.
 
 The Greeks included are:
 
-| Greek | Interpretation |
-|---|---|
-| Delta $\Delta$ | Sensitivity of the option price to the underlying stock price |
-| Gamma $\Gamma$ | Sensitivity of Delta to changes in the stock price |
-| Vega | Sensitivity of the option price to volatility |
-| Theta $\Theta$ | Sensitivity of the option price to time decay |
-| Rho $\rho$ | Sensitivity of the option price to interest rates |
+| Greek | Symbol | Interpretation |
+|---|---:|---|
+| Delta | $\Delta$ | Sensitivity of the option price to the underlying stock price |
+| Gamma | $\Gamma$ | Sensitivity of Delta to changes in the underlying stock price |
+| Vega | $\nu$ | Sensitivity of the option price to volatility |
+| Theta | $\Theta$ | Sensitivity of the option price to time decay |
+| Rho | $\rho$ | Sensitivity of the option price to interest rates |
+
+---
+
+### Delta
 
 Delta measures the sensitivity of the option value $V$ to changes in the underlying stock price $S$:
 
 $$
-\Delta
-=
-\frac{\partial V}{\partial S}
+\Delta=\frac{\partial V}{\partial S}
 $$
 
 The Delta chart shows how the call option becomes more sensitive to the stock price as the option moves deeper in-the-money. When the option is far out-of-the-money, Delta is close to $0$ because changes in the stock price have little effect on the option value. When the option is deep in-the-money, Delta approaches $1$ because the option behaves more like the underlying stock.
 
+For a European call option under Black-Scholes:
+
+$$
+\Delta_{\text{call}}=N(d_1)
+$$
+
+For a European put option:
+
+$$
+\Delta_{\text{put}}=N(d_1)-1
+$$
+
+---
+
+### Gamma
+
 Gamma measures how quickly Delta changes as the stock price changes:
 
 $$
-\Gamma
-=
-\frac{\partial^2 V}{\partial S^2}
+\Gamma=\frac{\partial^2 V}{\partial S^2}
 $$
 
-The Gamma chart shows how quickly Delta changes. Gamma is highest near the strike price $K$, meaning at-the-money options have the most unstable hedge ratio. This is important for options traders because high Gamma means the position’s exposure changes quickly as the underlying price moves.
+Gamma is highest near the strike price $K$, meaning at-the-money options have the most unstable hedge ratio. This is important for options traders because high Gamma means the position’s exposure changes quickly as the underlying price moves.
+
+Under Black-Scholes:
+
+$$
+\Gamma=\frac{N'(d_1)}{S\sigma\sqrt{T}}
+$$
+
+where $N'(d_1)$ is the standard normal probability density function evaluated at $d_1$.
+
+---
+
+### Vega
 
 Vega measures the sensitivity of the option price to volatility:
 
 $$
-\text{Vega}
-=
-\frac{\partial V}{\partial \sigma}
+\text{Vega}=\frac{\partial V}{\partial \sigma}
 $$
 
 The Vega chart shows sensitivity to volatility. Vega is usually highest near the strike price because at-the-money options are most affected by changes in uncertainty. This matters because option prices can rise or fall significantly when implied volatility changes, even if the underlying stock price does not move much.
 
+Under Black-Scholes:
+
+$$
+\text{Vega}=S\,N'(d_1)\sqrt{T}
+$$
+
+In the Python implementation, Vega is divided by $100$ so that it represents the option price change for a $1\%$ change in volatility.
+
+---
+
+### Theta
+
 Theta measures sensitivity to the passage of time:
 
 $$
-\Theta
-=
-\frac{\partial V}{\partial t}
+\Theta=\frac{\partial V}{\partial t}
 $$
 
 The Theta chart shows time decay. For long options, Theta is generally negative because the option loses time value as maturity approaches. This reflects the cost of holding optionality over time.
 
+For a European call option under Black-Scholes:
+
+$$
+\Theta_{\text{call}}
+=
+-\frac{S N'(d_1)\sigma}{2\sqrt{T}}
+-
+rKe^{-rT}N(d_2)
+$$
+
+For a European put option:
+
+$$
+\Theta_{\text{put}}
+=
+-\frac{S N'(d_1)\sigma}{2\sqrt{T}}
++
+rKe^{-rT}N(-d_2)
+$$
+
+In the Python implementation, Theta is divided by $365$ so that it represents daily time decay.
+
+---
+
+### Rho
+
 Rho measures sensitivity to interest rates:
 
 $$
-\rho
-=
-\frac{\partial V}{\partial r}
+\rho=\frac{\partial V}{\partial r}
 $$
 
 The Rho chart shows sensitivity to interest rates. Rho is usually less important for short-dated equity options than Delta, Gamma, Vega and Theta, but it is still part of the full Black-Scholes risk-sensitivity framework.
 
-The project also adds an implied volatility solver. Implied volatility is the volatility value that makes the Black-Scholes price equal to a given market option price. Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
+For a European call option:
 
 $$
-V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})
-=
-V_{\text{market}}
+\rho_{\text{call}}=KT e^{-rT}N(d_2)
+$$
+
+For a European put option:
+
+$$
+\rho_{\text{put}}=-KT e^{-rT}N(-d_2)
+$$
+
+In the Python implementation, Rho is divided by $100$ so that it represents the option price change for a $1\%$ change in interest rates.
+
+---
+
+## Implied Volatility
+
+The project also adds an implied volatility solver. Implied volatility is the volatility value that makes the Black-Scholes price equal to a given market option price.
+
+Mathematically, implied volatility $\sigma_{\text{imp}}$ solves:
+
+$$
+V_{\text{BS}}(S_0,K,T,r,\sigma_{\text{imp}})=V_{\text{market}}
 $$
 
 This is important because market participants often quote and compare options in volatility terms rather than price terms.
 
+The project solves for implied volatility using a numerical root-finding method. The solver searches for the volatility input $\sigma$ that makes the difference between the Black-Scholes price and the market price equal to zero:
+
+$$
+V_{\text{BS}}(\sigma)-V_{\text{market}}=0
+$$
+
 The implied volatility section uses synthetic option prices to recover implied volatilities across different strikes and maturities. This creates a volatility smile and a volatility surface.
 
-The volatility smile shows how implied volatility changes across strikes for one maturity. In the real market, implied volatility is usually not constant across strikes. This shows one of the main limitations of the basic Black-Scholes model, which assumes one constant volatility $\sigma$.
+---
 
-The volatility surface extends this idea across both strike and maturity. It shows how implied volatility varies across different option strikes and expiries. This is closer to how options are analysed in practice, where traders look at the entire volatility surface rather than using a single volatility input.
+## Volatility Smile
 
-Overall, this project demonstrates the full connection between stochastic modelling, option pricing, simulation, model validation and risk sensitivity. It starts with Brownian motion, extends to GBM stock-price simulation, applies risk-neutral valuation, prices European options using Monte Carlo, benchmarks against Black-Scholes, analyses convergence and simulation error, and then extends into Greeks, implied volatility, volatility smiles and volatility surfaces.
+The volatility smile shows how implied volatility changes across strikes for one maturity.
 
-The project is not intended to be a live trading model. Its purpose is to demonstrate the mathematical and computational foundations behind derivative pricing. The main limitations are that the model assumes constant volatility, no jumps, no transaction costs, no liquidity effects, and European-style exercise only. Future improvements could include real option-chain data, implied volatility calibration, stochastic volatility models, jump-diffusion models, American option pricing, and exotic options such as Asian, barrier and lookback options.
+In the basic Black-Scholes model, volatility is assumed to be constant. That means every option with the same underlying should use the same volatility input $\sigma$. In real markets, this is usually not true. Options with different strikes often trade at different implied volatilities.
+
+The volatility smile shows this visually. It plots implied volatility against strike price $K$ for a fixed maturity $T$.
+
+A simplified interpretation is:
+
+- near-the-money options may have one implied volatility;
+- deep out-of-the-money options may have higher implied volatility;
+- deep in-the-money options may also have different implied volatility;
+- the curve reveals how the market prices risk differently across strikes.
+
+This highlights one of the main limitations of the basic Black-Scholes model: the assumption of one constant volatility.
+
+---
+
+## Volatility Surface
+
+The volatility surface extends the volatility smile across both strike and maturity.
+
+Instead of only plotting implied volatility against strike for one expiry, the volatility surface shows implied volatility as a function of both strike $K$ and maturity $T$:
+
+$$
+\sigma_{\text{imp}}=\sigma_{\text{imp}}(K,T)
+$$
+
+This is closer to how options are analysed in practice. Options traders do not usually think in terms of one single volatility number. They look at the full volatility surface across strikes and expiries.
+
+The volatility surface helps show:
+
+- how implied volatility changes across strike;
+- how implied volatility changes across maturity;
+- how short-dated and long-dated options are priced differently;
+- where the market may be assigning higher or lower uncertainty.
+
+---
+
+## Overall Interpretation
+
+Overall, this project demonstrates the full connection between stochastic modelling, option pricing, simulation, model validation and risk sensitivity.
+
+It starts with Brownian motion, extends to GBM stock-price simulation, applies risk-neutral valuation, prices European options using Monte Carlo simulation, benchmarks against Black-Scholes, analyses convergence and simulation error, and then extends into Greeks, implied volatility, volatility smiles and volatility surfaces.
+
+The project is not intended to be a live trading model. Its purpose is to demonstrate the mathematical and computational foundations behind derivative pricing.
+
+The main limitations are that the model assumes:
+
+- constant volatility;
+- no jumps;
+- no transaction costs;
+- no liquidity effects;
+- European-style exercise only;
+- no calibration to real option-chain data.
+
+Future improvements could include:
+
+- real option-chain data;
+- implied volatility calibration;
+- stochastic volatility models;
+- jump-diffusion models;
+- American option pricing;
+- delta-hedging simulation;
+- exotic options such as Asian, barrier and lookback options.
