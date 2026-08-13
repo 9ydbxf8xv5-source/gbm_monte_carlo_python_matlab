@@ -110,26 +110,32 @@ def monte_carlo_antithetic_price(S0, K, T, r, sigma, n_steps, n_paths, option_ty
 
     st_1 = terminal_prices(z)
     st_2 = terminal_prices(z_antithetic)
-    st = np.concatenate([st_1, st_2])
 
     if option_type.lower() == "call":
-        payoffs = np.maximum(st - K, 0.0)
+        payoff_1 = np.maximum(st_1 - K, 0.0)
+        payoff_2 = np.maximum(st_2 - K, 0.0)
     elif option_type.lower() == "put":
-        payoffs = np.maximum(K - st, 0.0)
+        payoff_1 = np.maximum(K - st_1, 0.0)
+        payoff_2 = np.maximum(K - st_2, 0.0)
     else:
         raise ValueError("option_type must be 'call' or 'put'.")
 
-    discounted_payoffs = np.exp(-r * T) * payoffs
+    # Average each antithetic pair BEFORE taking the sample statistics.
+    # The pair mean is the estimator's unit of independence: Z and -Z are
+    # negatively correlated by construction, so treating the 2*half_paths
+    # payoffs as i.i.d. discards exactly the correlation that produces the
+    # variance reduction, and reports no benefit.
+    pair_means = np.exp(-r * T) * (payoff_1 + payoff_2) / 2.0
 
-    price = discounted_payoffs.mean()
-    std_error = discounted_payoffs.std(ddof=1) / np.sqrt(n_paths)
+    price = pair_means.mean()
+    std_error = pair_means.std(ddof=1) / np.sqrt(half_paths)
 
     return {
         "price": price,
         "std_error": std_error,
         "ci_low": price - 1.96 * std_error,
         "ci_high": price + 1.96 * std_error,
-    }
+        "n_pairs": half_paths,
 
 
 def convergence_analysis(S0, K, T, r, sigma, n_steps, path_counts, option_type="call"):
