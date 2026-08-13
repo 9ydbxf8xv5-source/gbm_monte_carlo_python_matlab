@@ -221,11 +221,11 @@ function [price, se] = antitheticCallPrice(S0, K, T, r, sigma, nSteps, nPaths)
     ST1 = S0 * exp(sum(logInc1, 1));
     ST2 = S0 * exp(sum(logInc2, 1));
 
-    ST = [ST1, ST2];
+     payoff1 = max(ST1 - K, 0);
+    payoff2 = max(ST2 - K, 0);
 
-    payoffs = max(ST - K, 0);
-    discounted = exp(-r*T) * payoffs;
+    % Average each antithetic pair before taking sample statistics.
+    pairMeans = exp(-r*T) * (payoff1 + payoff2) / 2;
 
-    price = mean(discounted);
-    se = std(discounted) / sqrt(nPaths);
-end
+    price = mean(pairMeans);
+    se = std(pairMeans) / sqrt(halfPaths);
